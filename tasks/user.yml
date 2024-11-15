@@ -1,0 +1,30 @@
+---
+- name: Create devops user
+  user:
+    name: devops
+    state: present
+    groups: sudo
+    shell: /bin/bash
+
+- name: Set up SSH key for devops
+  authorized_key:
+    user: devops
+    key: "{{ lookup('file', '../files/id_ed25519.pub') }}"
+
+
+- name: Create user bob as non-privileged user
+  user:
+    name: bob
+    state: present
+    shell: /bin/bash
+
+- name: Set up SSH key for bob
+  authorized_key:
+    user: bob
+    key: "{{ lookup('file', '../files/id_ed25519.pub') }}"
+
+- name: Allow bob to reboot without password
+  lineinfile:
+    path: /etc/sudoers
+    state: present
+    line: 'bob ALL=(ALL) NOPASSWD: /sbin/reboot, /bin/systemctl reboot -i'

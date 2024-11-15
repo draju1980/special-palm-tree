@@ -1,0 +1,27 @@
+---
+- name: remote nodes installation tasks
+  become: true
+  hosts: all
+  tasks:
+    # importing the defaults
+    - name: Include defaults variables
+      ansible.builtin.include_vars:
+        file: ../defaults/main.yml
+      tags: main_vars
+
+    # importing the datadir task
+    - import_tasks: firewall.yml
+      tags: firewall
+
+    # importing user task
+    - import_tasks: user.yml
+      tags: users
+
+    # importing the nginx task
+    - import_tasks: nginx.yml
+      tags: nginx
+
+    # importing the promtail task
+    - import_tasks: promtail.yml
+      tags: promtail
+    

@@ -1,0 +1,4 @@
+---
+# defaults file for monad
+# Sending Logs to Grafana Cloud loki instance using Promtail
+loki_instance: "https://1042148:glc_eyJvIjoiMTI2NTk2NyIsIm4iOiJzdGFjay0xMDg0MzY5LWhsLXdyaXRlLXByb210YWlsIiwiayI6IlJxNzN4RWMwODNBU1dXblE1SzYwcjRiNCIsIm0iOnsiciI6InByb2QtYXAtc291dGgtMSJ9fQ==@logs-prod-028.grafana.net/loki/api/v1/push"

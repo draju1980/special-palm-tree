@@ -1,0 +1,24 @@
+---
+# Update apt cache
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: yes 
+
+# Ensure Nginx is installed
+- name: Install Nginx
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+
+# Configure Nginx to serve a simple "Hello, World!" HTML page
+- name: Create HTML file
+  ansible.builtin.copy:
+    content: "<html><body><h1>Hello, World!</h1></body></html>"
+    dest: /var/www/html/index.html
+
+# Start Nginx service
+- name: Start Nginx service
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: yes

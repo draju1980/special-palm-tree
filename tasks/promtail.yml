@@ -1,0 +1,50 @@
+---
+- name: Add Grafana GPG key
+  ansible.builtin.apt_key:
+    url: https://packages.grafana.com/gpg.key
+    state: present
+
+- name: Add Grafana APT repository
+  ansible.builtin.apt_repository:
+    repo: deb https://packages.grafana.com/oss/deb stable main
+    state: present
+
+- name: Update APT package index
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install Promtail
+  ansible.builtin.apt:
+    name: promtail
+    state: present
+
+- name: Add Promtail user to adm group
+  ansible.builtin.user:
+    name: promtail
+    groups: adm
+    append: yes
+
+- name: Ensure Promtail can read nginx logs
+  ansible.builtin.file:
+    path: /var/log/nginx
+    state: directory
+    mode: '0750'
+    owner: root
+    group: adm
+
+- name: Stop Promtail service
+  ansible.builtin.systemd:
+    name: promtail
+    state: stopped
+    enabled: no 
+
+- name: Upload Promtail config
+  ansible.builtin.template:
+    src: ../templates/promtail-config.yml.j2
+    dest: /etc/promtail/config.yml
+
+- name: Ensure Promtail is started and enabled
+  ansible.builtin.systemd:
+    name: promtail
+    state: started
+    enabled: yes
